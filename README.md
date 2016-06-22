@@ -1,6 +1,6 @@
-# webpack2-react-skeleton
+# webpack2-react-starter
 
-Basic React skeleton using webpack 2 
+Basic React starter template using webpack 2 
 
 [![Build Status][build-badge]][build]
 
