@@ -3,6 +3,7 @@
 Basic React starter template using webpack 2 
 
 [![Build Status][build-badge]][build]
+[![License][license-badge]][license]
 
 ## Getting started
 
@@ -54,3 +55,5 @@ A pre-commit hook has been enabled (using pre-commit) that runs eslint and then 
 
 [build-badge]: https://travis-ci.org/michael-wolfenden/webpack2-react-starter.svg?style=flat-square
 [build]: https://travis-ci.org/michael-wolfenden/webpack2-react-starter
+[license-badge]: https://img.shields.io/github/license/michael-wolfenden/webpack2-react-starter.svg?style=flat-square
+[license]: https://raw.githubusercontent.com/michael-wolfenden/webpack2-react-starter/master/LICENSE
