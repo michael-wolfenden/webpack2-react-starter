@@ -52,5 +52,5 @@ A pre-commit hook has been enabled (using pre-commit) that runs eslint and then 
 + [pre-commit](https://github.com/observing/pre-commit) - A pre-commit hook installer for git. It will ensure that your npm test (or other specified scripts) passes before you can commit your changes.
 + [npm-run-all](https://www.npmjs.com/package/npm-run-all) - A CLI tool to run multiple npm-scripts in parallel or sequential.
 
-[build-badge]: https://travis-ci.org/michael-wolfenden/webpack2-react-skeleton.svg?style=flat-square
-[build]: https://travis-ci.org/michael-wolfenden/webpack2-react-skeleton
+[build-badge]: https://travis-ci.org/michael-wolfenden/webpack2-react-starter.svg?style=flat-square
+[build]: https://travis-ci.org/michael-wolfenden/webpack2-react-starter
