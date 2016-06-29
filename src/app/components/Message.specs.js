@@ -1,6 +1,6 @@
 import React from 'react'
-import expect from 'expect'
 import { mount } from 'enzyme'
+import assert from 'power-assert'
 
 import Message from './Message'
 
@@ -14,7 +14,6 @@ describe('<Message />', () => {
             text: 'This is a message',
         })
 
-        expect(component.text())
-            .toMatch(/This is a message/)
+        assert(component.text() === 'This is a message')
     })
 })

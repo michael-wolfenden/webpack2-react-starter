@@ -1,73 +1,80 @@
+const merge = require('deepmerge')
+
 const webpackConfig = require('./webpack.config.development')
 const specsGlob = 'src/app/**/*.specs.js'
 
 // to debug open http://127.0.0.1:9876/debug.html and check console
 module.exports = config => config.set({
+    // specsGlob relative to this path
     basePath: '../',
 
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    // run browserless
+    browsers: ['PhantomJS'],
+
+    // use the mocha test framework
     frameworks: ['mocha'],
 
-    // list of files / patterns to load in the browser
+    // report results in this format
+    reporters: ['mocha'],
+
+    // load spec files
     files: [
         specsGlob,
     ],
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    // preprocess with webpack
     preprocessors: {
         [specsGlob]: ['webpack'],
     },
 
-    // webpack configuration
-    // the externals are needed for enzyme
-    //  (ref: https://github.com/airbnb/enzyme/blob/master/docs/guides/karma.md)
-    webpack: Object.assign({}, webpackConfig,
-        {
-            externals: {
-                cheerio: 'window',
-                'react/addons': true,
-                'react/lib/ExecutionEnvironment': true,
-                'react/lib/ReactContext': true,
-            },
-        }
-    ),
+    // use this webpack configuration
+    webpack: createKarmaWebpackConfig(webpackConfig), // eslint-disable-line no-use-before-define
 
     // silence bundling output
     webpackMiddleware: {
         noInfo: true,
+        quiet: true,
     },
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
-
-    // web server port
-    port: 9876,
-
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN ||
-    // config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
-
-    // Concurrency level
-    // how many browser should be started simultaneous
-    concurrency: Infinity,
 })
 
+const createKarmaWebpackConfig = (devWebpackConfig) => {
+    const karmaWebpackConfig = merge(devWebpackConfig, {
+        module: {
+            // some libraries don't like being run through babel.
+            noParse: [
+                /node_modules(\\|\/)acorn/,
+            ],
+
+            loaders: [
+                {
+                    query: {
+                        plugins: [
+                            // needed for power-assert
+                            // (ref:https://github.com/power-assert-js/babel-plugin-espower)
+                            'babel-plugin-espower',
+                        ],
+                    },
+                },
+                {
+                    // needed for power-assert
+                    test: /\.json$/,
+                    loader: 'json',
+                },
+            ],
+        },
+
+        // the following are needed for enzyme
+        // (ref: https://github.com/airbnb/enzyme/blob/master/docs/guides/karma.md)
+        externals: {
+            cheerio: 'window',
+            'react/addons': true,
+            'react/lib/ExecutionEnvironment': true,
+            'react/lib/ReactContext': true,
+        },
+    })
+
+    // clear any plugins
+    karmaWebpackConfig.plugins = []
+
+    return karmaWebpackConfig
+}
