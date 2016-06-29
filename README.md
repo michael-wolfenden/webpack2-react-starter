@@ -39,7 +39,7 @@ A pre-commit hook has been enabled (using pre-commit) that runs eslint and then 
 
 + [karma](https://github.com/karma-runner/karma) - Test Runner for JavaScript
 + [enzyme](https://github.com/airbnb/enzyme) - JavaScript Testing utilities for React
-+ [expect](https://github.com/mjackson/expect) - Write better assertions
++ [power-assert](https://github.com/power-assert-js/power-assert) -  Provides descriptive assertion messages through standard assert interface
 * [phantomjs](https://github.com/Medium/phantomjs) - Headless website testing
 
 ### React
