@@ -1,7 +1,10 @@
-const merge = require('deepmerge')
+const deepmerge = require('deepmerge')
 
 const webpackConfig = require('./webpack.config.development')
 const specsGlob = 'src/app/**/*.specs.js'
+
+// clear plugins
+webpackConfig.plugins = []
 
 // to debug open http://127.0.0.1:9876/debug.html and check console
 module.exports = config => config.set({
@@ -27,18 +30,14 @@ module.exports = config => config.set({
         [specsGlob]: ['webpack'],
     },
 
-    // use this webpack configuration
-    webpack: createKarmaWebpackConfig(webpackConfig), // eslint-disable-line no-use-before-define
-
     // silence bundling output
     webpackMiddleware: {
         noInfo: true,
         quiet: true,
     },
-})
 
-const createKarmaWebpackConfig = (devWebpackConfig) => {
-    const karmaWebpackConfig = merge(devWebpackConfig, {
+    // use this webpack configuration
+    webpack: deepmerge(webpackConfig, {
         module: {
             // some libraries don't like being run through babel.
             noParse: [
@@ -71,10 +70,6 @@ const createKarmaWebpackConfig = (devWebpackConfig) => {
             'react/lib/ExecutionEnvironment': true,
             'react/lib/ReactContext': true,
         },
-    })
+    }),
+})
 
-    // clear any plugins
-    karmaWebpackConfig.plugins = []
-
-    return karmaWebpackConfig
-}
