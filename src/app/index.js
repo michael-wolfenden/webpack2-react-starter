@@ -12,21 +12,19 @@ const store = configureStore()
 const history = configureHistory(store)
 const rootElement = document.getElementById('root')
 
-render(
-    <AppContainer>
-        <Root store={store} history={history} />
-    </AppContainer>,
-    rootElement
-)
+const renderApp = (RootComponent) =>
+    render(
+        <AppContainer>
+            <RootComponent store={store} history={history} />
+        </AppContainer>,
+        rootElement
+    )
+
+renderApp(Root)
 
 if (module.hot) {
-    module.hot.accept('components/Root', () => {
-        const NextRoot = require('components/Root').default
-        render(
-            <AppContainer>
-                <NextRoot store={store} history={history} />
-            </AppContainer>,
-            rootElement
-        )
-    })
+    module.hot.accept(
+        'components/Root',
+        () => renderApp(require('components/Root').default)
+    )
 }

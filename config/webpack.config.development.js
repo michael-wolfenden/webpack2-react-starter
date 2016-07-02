@@ -5,12 +5,12 @@ const PATHS = require('./paths')
 const webpackConfig = {
 
     entry: [
+        // react hot loader 3
         'react-hot-loader/patch',
         PATHS.entryFile,
     ],
 
     devServer: {
-        contentBase: PATHS.app,
         // only display errors
         stats: 'errors-only',
     },
@@ -60,6 +60,7 @@ const webpackConfig = {
                         'stage-1',
                     ],
                     plugins: [
+                        // react hot loader 3
                         'react-hot-loader/babel',
                         // (ref: https://babeljs.io/docs/plugins/transform-runtime/)
                         'transform-runtime',
