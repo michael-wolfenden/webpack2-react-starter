@@ -9,7 +9,7 @@ Basic React starter template using webpack 2
 
 This will install all npm packages and the  validate the install by running the linter and tests
 
-    > npm run steup
+    > npm run setup
 
 ## Development
 
