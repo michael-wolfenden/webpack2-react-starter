@@ -30,10 +30,24 @@ module.exports = config => config.set({
         [specsGlob]: ['webpack'],
     },
 
-    // silence bundling output
+    // silence bundling output except exceptions
+    // ie. from eslint
     webpackMiddleware: {
         noInfo: true,
-        quiet: true,
+        stats: {
+            errors: true,
+            errorDetails: true,
+            colors: true,
+            hash: false,
+            version: false,
+            timings: false,
+            assets: false,
+            chunks: false,
+            modules: false,
+            reasons: false,
+            source: false,
+            warnings: false,
+        },
     },
 
     // use this webpack configuration
