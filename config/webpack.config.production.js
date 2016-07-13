@@ -1,10 +1,10 @@
-const { optimize } = require('webpack')
-const WebpackMd5Hash = require('webpack-md5-hash')
+const { optimize, HashedModuleIdsPlugin } = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const { dependencies } = require('../package.json')
+const InlineManifestWebpackPlugin = require('./inline-manifest-webpack-plugin')
 const PATHS = require('./paths')
 
 const webpackConfig = {
@@ -64,6 +64,7 @@ const webpackConfig = {
                 loader: 'babel',
                 query: {
                     cacheDirectory: true,
+                    compact: true,
                     presets: [
                         'react',
                         // (ref: https://github.com/gajus/babel-preset-es2015-webpack)
@@ -94,22 +95,38 @@ const webpackConfig = {
             root: PATHS.rootDir,
         }),
 
-        new WebpackMd5Hash(),
+        // use hashed filename instead of webpack generated id's for imports
+        // this aids with long term caching
+        // (ref: https://github.com/webpack/webpack/issues/1315)
+        new HashedModuleIdsPlugin(),
 
+        // generate 3 bundles
+        // * app (from main entry file)
+        // * vendor (from project.json package dependencies)
+        // * manifest (entry chunk that includes the webpack runtime and chunkhash mappings)
+        //   this will be injected in the main index.html page
+        // (ref: https://github.com/webpack/webpack/tree/master/examples/chunkhash)
         new optimize.CommonsChunkPlugin({
-            names: ['vendor'],
+            names: ['vendor', 'manifest'],
         }),
 
         // inject references to the generated bundles (both js and css) into
         // the index html template, minify and copy to dist folder
         new HtmlWebpackPlugin({
             template: PATHS.index,
+            excludeChunks: ['manifest'],
             inject: true,
             minify: {
                 removeComments: false,
                 collapseWhitespace: true,
             },
         }),
+
+        // inject manifest bundle from above into the index html template
+        // prevents changes in app bundle changing the hash of the vendor
+        // bundle and vice versa.
+        // (ref: https://github.com/webpack/webpack/issues/1315)
+        new InlineManifestWebpackPlugin(),
 
         new CopyWebpackPlugin([{
             from: PATHS.publicDir,

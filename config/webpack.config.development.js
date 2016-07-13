@@ -52,6 +52,7 @@ const webpackConfig = {
                 loader: 'babel',
                 query: {
                     cacheDirectory: true,
+                    compact: true,
                     presets: [
                         'react',
                         // (ref: https://github.com/gajus/babel-preset-es2015-webpack)
