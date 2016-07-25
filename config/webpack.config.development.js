@@ -11,6 +11,7 @@ const webpackConfig = {
     ],
 
     devServer: {
+        contentBase: PATHS.publicDir,
         // only display errors
         stats: 'errors-only',
     },
